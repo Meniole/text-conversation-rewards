@@ -13,6 +13,13 @@ import { Module, Result } from "./processor";
 export class UserExtractorModule implements Module {
   private readonly _configuration: UserExtractorConfiguration | null = configuration.incentives.userExtractor;
 
+  constructor() {
+    if (this._configuration === null) {
+      console.log("user extractor module configuration is null, setting defaults.");
+      this._configuration = Value.Default(userExtractorConfigurationType, {}) as UserExtractorConfiguration;
+    }
+  }
+
   get enabled(): boolean {
     if (!Value.Check(userExtractorConfigurationType, this._configuration)) {
       console.warn("Invalid / missing configuration detected for UserExtractorModule, disabling.");
