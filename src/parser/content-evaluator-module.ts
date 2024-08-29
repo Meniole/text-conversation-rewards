@@ -36,6 +36,12 @@ export class ContentEvaluatorModule implements Module {
 
   constructor() {
     if (this._configuration?.multipliers) {
+      logger.debug("Will use configuration", {
+        cfg: {
+          apiKey: OPENAI_API_KEY,
+          ...(this._configuration?.openAi.endpoint && { baseURL: this._configuration.openAi.endpoint }),
+        },
+      });
       this._fixedRelevances = this._configuration.multipliers.reduce((acc, curr) => {
         return {
           ...acc,
