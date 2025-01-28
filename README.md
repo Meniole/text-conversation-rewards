@@ -17,6 +17,7 @@
 
 3. **Copy and paste the `.env.example` and populate the environment variables**
 
+
 4. **Start the server**:
 
    ```sh
