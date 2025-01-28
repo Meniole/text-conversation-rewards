@@ -8,7 +8,7 @@
    ```sh
    bun install
    ```
-
+fix2
 2. **Build the UI for production**:
 
    ```sh
