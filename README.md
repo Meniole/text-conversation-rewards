@@ -2,6 +2,7 @@
 
 ## How to Get Started
 fix 1 fix 1.2
+fix 3
 1. **Install dependencies**: Make sure you have [Bun](https://bun.sh/) installed, then run:
 
    ```sh
