@@ -11,7 +11,7 @@
 2. **Build the UI for production**:
 
    ```sh
-   cd src/web && bun run ui:build && echo done
+   cd src/web && bun run ui:build
    ```
 
 3. **Copy and paste the `.env.example` and populate the environment variables**
