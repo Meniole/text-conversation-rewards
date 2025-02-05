@@ -5,13 +5,13 @@
 1. **Install dependencies**: Make sure you have [Bun](https://bun.sh/) installed, then run:
 
    ```sh
-   bun install 
+   bun install
    ```
 
 2. **Build the UI for production**:
 
    ```sh
-   cd src/web && bun run ui:build
+   cd src/web && bun run ui:build && echo done
    ```
 
 3. **Copy and paste the `.env.example` and populate the environment variables**
