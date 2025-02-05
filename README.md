@@ -1,11 +1,11 @@
 # `@ubiquity-os/text-conversation-rewards`
 
-## How to Get Started 
+## How to Get Started
 
 1. **Install dependencies**: Make sure you have [Bun](https://bun.sh/) installed, then run:
 
    ```sh
-   bun install
+   bun install 
    ```
 
 2. **Build the UI for production**:
