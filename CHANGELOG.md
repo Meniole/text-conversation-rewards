@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/Meniole/text-conversation-rewards/compare/v1.6.0...v1.6.1) (2025-07-06)
+
+
+### Bug Fixes
+
+* empty commit ([cb5725e](https://github.com/Meniole/text-conversation-rewards/commit/cb5725ea790690386ebac4937834949edbecf163))
+
 ## [1.1.0](https://github.com/Meniole/text-conversation-rewards/compare/v1.0.0...v1.1.0) (2025-07-06)
 
 
