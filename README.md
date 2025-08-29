@@ -504,7 +504,6 @@ with:
         autmaticTransferMode: false
       githubComment:
         post: true
-        debug: false
 ```
 
 ## Permit2 allowance UI helper
