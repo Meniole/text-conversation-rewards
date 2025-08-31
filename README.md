@@ -3,8 +3,6 @@
 
 1. **Install dependencies**: Make sure you have [Bun](https://bun.sh/) installed, then run:
 
-   ```sh
-   ```
 
 2. **Build the UI for production**:
 
