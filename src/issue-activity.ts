@@ -12,9 +12,7 @@ import {
 import { areLoginsEquivalent } from "./helpers/github";
 import { isPullRequestEvent } from "./helpers/type-assertions";
 import {
-  getIssue,
   getIssueComments,
-  getIssueEvents,
   getPullRequest,
   getPullRequestReviewComments,
   getPullRequestReviews,
@@ -53,23 +51,7 @@ export class IssueActivity {
   linkedMergedPullRequests: PullRequest[] = [];
   linkedIssues: ClosedByPullRequestsReferences[] = [];
 
-  async init() {
-    if (this.self) {
-      this._context.logger.info("The Issue Activity is already initialized.");
-      return;
-    }
-    try {
-      [this.self, this.events, this.comments, this.linkedMergedPullRequests, this.linkedIssues] = await Promise.all([
-        getIssue(this._context, this._issueParams),
-        getIssueEvents(this._context, this._issueParams),
-        getIssueComments(this._context, this._issueParams),
-        this._getLinkedPullRequests(),
-        this._getLinkedIssues(),
-      ]);
-    } catch (error) {
-      throw this._context.logger.error(`Could not fetch issue data: ${error}`);
-    }
-  }
+  async init() {}
 
   private async _getLinkedIssues(): Promise<ClosedByPullRequestsReferences[]> {
     if (!isPullRequest(this._context)) {
