@@ -581,4 +581,4 @@ PERMIT_TREASURY_GITHUB_USERNAME=ubiquity-os-treasury
 PERMIT_ERC20_TOKENS_NO_FEE_WHITELIST="0xSomeTokenAddress,0xAnotherTokenAddress"
 ```
 
-Some cool change here.
+Some cool change here. Even cooler changes.
