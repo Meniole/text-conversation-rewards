@@ -4,7 +4,7 @@ import { createPlugin } from "@ubiquity-os/plugin-sdk";
 import { Manifest } from "@ubiquity-os/plugin-sdk/manifest";
 import { LogLevel } from "@ubiquity-os/ubiquity-os-logger";
 import { mkdirSync } from "fs";
-import { ExecutionContext } from "hono";
+import { Context, ExecutionContext } from "hono";
 import { serveStatic } from "hono/bun";
 import { cors } from "hono/cors";
 import { existsSync } from "node:fs";
@@ -18,6 +18,7 @@ import { ContextPlugin, PluginSettings, pluginSettingsSchema, SupportedEvents } 
 import { IssueActivityCache } from "../db/issue-activity-cache";
 import { getPayload } from "./payload";
 import { Result } from "../../types/results";
+import { Command } from "../../types/command";
 
 function githubUrlToFileName(url: string): string {
   const repoMatch = RegExp(/github\.com\/([^/]+)\/([^/?#]+)/).exec(url);
@@ -100,7 +101,7 @@ async function parseIssues(
   return results;
 }
 
-const baseApp = createPlugin<PluginSettings, EnvConfig, null, SupportedEvents>(
+const baseApp = createPlugin<PluginSettings, EnvConfig, Command, SupportedEvents>(
   async (context) => {
     const { payload, octokit, logger } = context;
     const supabaseClient = new SupabaseClient(context.env.SUPABASE_URL, context.env.SUPABASE_KEY);
@@ -201,13 +202,23 @@ app.use(
   })
 );
 
-// Fakes OpenAi routes
-app.post("/openai/:module/*", async (c) => {
+function detectLlmModule(text: { messages?: Array<{ content?: unknown }> }, moduleParam?: string) {
+  if (moduleParam) return moduleParam;
+  const systemContent = text?.messages?.[0]?.content;
+  if (typeof systemContent === "string") {
+    if (systemContent.includes("external images")) return "llmImageModel";
+    if (systemContent.includes("external content")) return "llmWebsiteModel";
+  }
+  return "contentEvaluator";
+}
+
+async function llmRouteHandler<T extends Context>(c: T, moduleParam?: string) {
   const text = await c.req.json();
   const regex = /The number of entries in the JSON response MUST equal (\d+)/g;
+  const moduleName = detectLlmModule(text, moduleParam);
 
   if ("messages" in text) {
-    switch (c.req.param("module")) {
+    switch (moduleName) {
       case "contentEvaluator": {
         const comments: { id: string; comment: string; author: string }[] = [];
 
@@ -248,6 +259,21 @@ app.post("/openai/:module/*", async (c) => {
         });
     }
   }
+}
+
+app.post(`/v1/chat/completions`, async (c) => {
+  const response = await llmRouteHandler(c);
+  return response;
+});
+
+app.post(`/:module/v1/chat/completions`, async (c) => {
+  const response = await llmRouteHandler(c, c.req.param("module"));
+  return response;
+});
+
+// Fakes OpenAi routes
+app.post("/openai/:module/*", async (c) => {
+  return await llmRouteHandler(c, c.req.param("module"));
 });
 
 app.get("/openai/*", () => {
